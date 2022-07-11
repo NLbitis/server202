@@ -39,5 +39,14 @@ rule multiqc:
         ),
     log:
         "logs/multiqc.log",
-    wrapper:
-        "0.74.0/bio/multiqc"
+    run:
+        from os import path
+        from subprocess import call
+
+        output_dir = path.dirname(output[0])
+        output_name = path.basename(output[0])
+
+        call("multiqc --force -o {output_dir} -n {output_name} {input_data} > {log} 2>&1".format(output_dir = output_dir,
+        output_name = output_name, input_data = input[0], log = log ), shell = True )
+    #wrapper:
+    #    "0.74.0/bio/multiqc"
