@@ -1,7 +1,6 @@
+include: "mapping.smk"
 
 rule all:
     input:
-       expand("rules.map_reads", sample='SRR19328436_part')
+       expand(rules.create_pileup_call.output, sample=['SRR19328436_part'])
 
-
-include: "mapping.smk"
