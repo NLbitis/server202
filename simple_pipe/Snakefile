@@ -1,0 +1,7 @@
+
+rule all:
+    input:
+       expand("rules.map_reads", sample='SRR19328436_part')
+
+
+include: "mapping.smk"
