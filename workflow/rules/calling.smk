@@ -14,6 +14,9 @@ if "restrict-regions" in config["processing"]:
 rule call_variants:
     input:
         bam=get_sample_bams,
+        bai = (get_bai
+               if not config['processing']['bqsr']
+               else []),
         ref="resources/genome.fasta",
         idx="resources/genome.dict",
         known="resources/variation.noiupac.vcf.gz",

@@ -110,3 +110,13 @@ rule samtools_index:
         "logs/samtools/index/{prefix}.log",
     wrapper:
         "0.74.0/bio/samtools/index"
+
+rule samtools_index_dedup:
+    input:
+        "results/dedup/{sample}-{unit}.bam",
+    output:
+        "results/dedup/{sample}-{unit}.bam.bai",
+    log:
+        "logs/samtools/index_mdup/{sample}-{unit}.log",
+    wrapper:
+        "0.74.0/bio/samtools/index"
