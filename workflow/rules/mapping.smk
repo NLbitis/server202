@@ -40,8 +40,8 @@ rule map_reads_with_minimap:
         "logs/minimap/{sample}-{unit}.log"
     shell:
         """
-         minimap2 -Y  -ax sr {input.idx} {input.reads} |  samtools sort -O sam -o results/mapped/test.sam
-         samtools view -b -h results/mapped/test.sam -o {output} >&2 {log}
+         minimap2 -Y  -ax sr  -R '@RG\tID:~{sample}\tSM:~{sample}\tPL:BGI\tLB:lib1\tPU:unit1' {input.idx} {input.reads}  |  samtools sort -O sam -o results/mapped/test.sam
+         samtools view -b -h results/mapped/test.sam -o {output} 
         """
 
 rule map_reads:
