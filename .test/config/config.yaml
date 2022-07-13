@@ -11,6 +11,7 @@ local_genome_copy:
   path_to_genome_fai: ""
   path_to_bwa_index: ""
   path_to_minimap_index: ""
+  known_variants: ""
 
 filtering:
   # Set to true in order to apply machine learning based recalibration of

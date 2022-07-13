@@ -29,7 +29,6 @@ rule trim_reads_pe:
     wrapper:
         "0.74.0/bio/trimmomatic/pe"
 
-#TODO sort reads
 rule map_reads_with_minimap:
     input:
         reads=get_trimmed_reads,
@@ -82,8 +81,8 @@ rule recalibrate_base_qualities:
         bai=get_recal_input(bai=True),
         ref=get_genome_fun,
         dict=config["local_genome_copy"]["path_to_genome"] + ".dict" if config["local_genome_copy"]["path_to_genome"] != "" else "resources/genome.dict",
-        known="resources/variation.noiupac.vcf.gz",
-        known_idx="resources/variation.noiupac.vcf.gz.tbi",
+        known=config["local_genome_copy"]["known_variants"],
+        known_idx=config["local_genome_copy"]["known_variants"] + ".tbi",
     output:
         recal_table="results/recal/{sample}-{unit}.grp",
     log:
