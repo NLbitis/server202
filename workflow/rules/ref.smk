@@ -42,7 +42,7 @@ rule genome_dict:
 rule get_known_variation:
     input:
         # use fai to annotate contig lengths for GATK BQSR
-        fai="resources/genome.fasta.fai",
+        fai=checkpoints.genome_faidx.get().output[0],
     output:
         vcf="resources/variation.vcf.gz",
     log:
