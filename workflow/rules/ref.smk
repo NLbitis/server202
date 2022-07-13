@@ -99,6 +99,14 @@ rule bwa_index:
         "0.74.0/bio/bwa/index"
 
 
+rule minimap_index:
+    input:
+        "resources/genome.fasta",
+    output:
+        "resources/genome.fasta.mni"
+    shell:
+        "minimap2 -d {output} {input}  "
+
 rule get_vep_cache:
     output:
         directory("resources/vep/cache"),

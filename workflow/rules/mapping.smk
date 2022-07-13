@@ -29,6 +29,17 @@ rule trim_reads_pe:
     wrapper:
         "0.74.0/bio/trimmomatic/pe"
 
+#TODO sort reads
+rule map_reads_with_minimap:
+    input:
+        reads=get_trimmed_reads,
+        idx=rules.minimap_index.output
+    output:
+        temp("results/mapped/{sample}-{unit}.sorted.minimap.bam")
+    log:
+        "logs/minimap/{sample}-{unit}.log"
+    shell:
+        "minimap2 -Y -t  -ax sr {input.idx} {input.reads} >&2 {log}"
 
 rule map_reads:
     input:
@@ -50,7 +61,7 @@ rule map_reads:
 
 rule mark_duplicates:
     input:
-        "results/mapped/{sample}-{unit}.sorted.bam",
+        "results/mapped/{sample}-{unit}.sorted.minimap.bam" if config["processing"]["minimap"] else "results/mapped/{sample}-{unit}.sorted.bam"
     output:
         bam=temp("results/dedup/{sample}-{unit}.bam"),
         metrics="results/qc/dedup/{sample}-{unit}.metrics.txt",
