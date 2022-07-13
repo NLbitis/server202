@@ -47,7 +47,7 @@ def get_contigs():
         with open(config["local_genome_copy"]["path_to_genome_fai"], 'r') as fai:
             return pd.read_table(fai,header=None,usecols=[0],squeeze=True,dtype=str)
 
-def get_fai():
+def get_fai(wildcards):
     if config["local_genome_copy"]["path_to_genome_fai"] == "":
         return checkpoints.genome_faidx.get().output[0]
     else:
