@@ -39,7 +39,10 @@ rule map_reads_with_minimap:
     log:
         "logs/minimap/{sample}-{unit}.log"
     shell:
-        "minimap2 -Y  -ax sr {input.idx} {input.reads} |  samtools sort |  samtools view -b -h - -o {output} >&2 {log}"
+        """
+         minimap2 -Y  -ax sr {input.idx} {input.reads} |  samtools sort -O sam -o results/mapped/test.sam
+         samtools view -b -h results/mapped/test.sam -o {output} >&2 {log}
+        """
 
 rule map_reads:
     input:
