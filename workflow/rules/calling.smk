@@ -15,7 +15,7 @@ rule call_variants:
     input:
         bam=get_sample_bams,
         ref=get_genome_fun,
-        idx="resources/genome.dict",
+        idx=config["local_genome_copy"]["path_to_genome"] + ".dict" if config["local_genome_copy"]["path_to_genome"] != "" else "resources/genome.dict",
         known="resources/variation.noiupac.vcf.gz",
         tbi="resources/variation.noiupac.vcf.gz.tbi",
         regions=(
