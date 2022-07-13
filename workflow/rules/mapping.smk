@@ -81,7 +81,7 @@ rule recalibrate_base_qualities:
         bam=get_recal_input(),
         bai=get_recal_input(bai=True),
         ref=get_genome_fun,
-        dict="resources/genome.dict",
+        dict=config["local_genome_copy"]["path_to_genome"] + ".dict" if config["local_genome_copy"]["path_to_genome"] != "" else "resources/genome.dict",
         known="resources/variation.noiupac.vcf.gz",
         known_idx="resources/variation.noiupac.vcf.gz.tbi",
     output:
