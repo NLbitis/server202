@@ -6,6 +6,12 @@ ref:
   release: 98
   build: R64-1-1
 
+local_genome_copy:
+  path_to_genome: ""
+  path_to_genome_fai: ""
+  path_to_bwa_index: ""
+  path_to_minimap_index: ""
+
 filtering:
   # Set to true in order to apply machine learning based recalibration of
   # quality scores instead of hard filtering.
@@ -19,6 +25,7 @@ filtering:
       "QD < 2.0 || FS > 200.0 || ReadPosRankSum < -20.0"
 
 processing:
+  minimap: true
   remove-duplicates: true
   # restrict-regions: ../raw/captured_regions.bed
   # region-padding: 100
