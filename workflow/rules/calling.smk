@@ -17,7 +17,7 @@ rule call_variants:
         ref=get_genome_fun,
         idx=config["local_genome_copy"]["path_to_genome"] + ".dict" if config["local_genome_copy"]["path_to_genome"] != "" else "resources/genome.dict",
         known=config["local_genome_copy"]["known_variants"],
-        tbi=config["local_genome_copy"]["known_variants"] + "tbi",
+        tbi=config["local_genome_copy"]["known_variants"] + ".tbi",
         regions=(
             "results/called/{contig}.regions.bed"
             if config["processing"].get("restrict-regions")
