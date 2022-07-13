@@ -17,7 +17,7 @@ checkpoint genome_faidx:
     input:
         get_genome_fun,
     output:
-        "resources/genome.fasta.fai",
+        config["local_genome_copy"]["path_to_genome_fai"] + ".fai" if config["local_genome_copy"]["path_to_genome_fai"] != "" else "resources/genome.fasta.fai",
     log:
         "logs/genome-faidx.log",
     cache: True
@@ -29,7 +29,7 @@ rule genome_dict:
     input:
         get_genome_fun,
     output:
-        "resources/genome.dict",
+        config["local_genome_copy"]["path_to_genome"] + ".dict" if config["local_genome_copy"]["path_to_genome"] != "" else "resources/genome.dict"
     log:
         "logs/samtools/create_dict.log",
     conda:
@@ -89,7 +89,7 @@ rule bwa_index:
     input:
         get_genome_fun,
     output:
-        multiext(get_genome_fun, ".amb", ".ann", ".bwt", ".pac", ".sa"),
+        multiext(config["local_genome_copy"]["path_to_bwa_index"] if config["local_genome_copy"]["path_to_bwa_index"] != "" else "resources/genome.fasta" , ".amb", ".ann", ".bwt", ".pac", ".sa"),
     log:
         "logs/bwa_index.log",
     resources:
@@ -103,7 +103,7 @@ rule minimap_index:
     input:
         get_genome_fun,
     output:
-        "resources/genome.fasta.mni"
+        multiext(config["local_genome_copy"]["path_to_minimap_index"] if config["local_genome_copy"]["path_to_minimap_index"] != "" else "resources/genome.fasta" , ".mni"),
     shell:
         "minimap2 -d {output} {input}  "
 
