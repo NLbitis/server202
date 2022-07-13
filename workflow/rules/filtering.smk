@@ -1,6 +1,6 @@
 rule select_calls:
     input:
-        ref="resources/genome.fasta",
+        ref=get_genome_fun,
         vcf="results/genotyped/all.vcf.gz",
     output:
         vcf=temp("results/filtered/all.{vartype}.vcf.gz"),
@@ -14,7 +14,7 @@ rule select_calls:
 
 rule hard_filter_calls:
     input:
-        ref="resources/genome.fasta",
+        ref=get_genome_fun,
         vcf="results/filtered/all.{vartype}.vcf.gz",
     output:
         vcf=temp("results/filtered/all.{vartype}.hardfiltered.vcf.gz"),

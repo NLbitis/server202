@@ -15,7 +15,7 @@ rule get_genome:
 
 checkpoint genome_faidx:
     input:
-        "resources/genome.fasta",
+        get_genome_fun,
     output:
         "resources/genome.fasta.fai",
     log:
@@ -27,7 +27,7 @@ checkpoint genome_faidx:
 
 rule genome_dict:
     input:
-        "resources/genome.fasta",
+        get_genome_fun,
     output:
         "resources/genome.dict",
     log:
@@ -87,9 +87,9 @@ rule tabix_known_variants:
 
 rule bwa_index:
     input:
-        "resources/genome.fasta",
+        get_genome_fun,
     output:
-        multiext("resources/genome.fasta", ".amb", ".ann", ".bwt", ".pac", ".sa"),
+        multiext(get_genome_fun, ".amb", ".ann", ".bwt", ".pac", ".sa"),
     log:
         "logs/bwa_index.log",
     resources:
@@ -101,7 +101,7 @@ rule bwa_index:
 
 rule minimap_index:
     input:
-        "resources/genome.fasta",
+        get_genome_fun,
     output:
         "resources/genome.fasta.mni"
     shell:

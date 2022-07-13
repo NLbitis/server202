@@ -80,7 +80,7 @@ rule recalibrate_base_qualities:
     input:
         bam=get_recal_input(),
         bai=get_recal_input(bai=True),
-        ref="resources/genome.fasta",
+        ref=get_genome_fun,
         dict="resources/genome.dict",
         known="resources/variation.noiupac.vcf.gz",
         known_idx="resources/variation.noiupac.vcf.gz.tbi",
@@ -100,7 +100,7 @@ rule apply_base_quality_recalibration:
     input:
         bam=get_recal_input(),
         bai=get_recal_input(bai=True),
-        ref="resources/genome.fasta",
+        ref=get_genome_fun,
         dict="resources/genome.dict",
         recal_table="results/recal/{sample}-{unit}.grp",
     output:

@@ -64,6 +64,11 @@ def get_read_group(wildcards):
         platform=units.loc[(wildcards.sample, wildcards.unit), "platform"],
     )
 
+def get_genome_fun(wildcards):
+    if config["local_genome_copy"]["path_to_genome"] != "":
+        return config["local_genome_copy"]["path_to_genome"]
+    else:
+        return "resources/genome.fasta"
 
 def get_trimmed_reads(wildcards):
     """Get trimmed reads of given sample-unit."""
