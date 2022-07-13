@@ -101,7 +101,7 @@ rule apply_base_quality_recalibration:
         bam=get_recal_input(),
         bai=get_recal_input(bai=True),
         ref=get_genome_fun,
-        dict="resources/genome.dict",
+        dict=config["local_genome_copy"]["path_to_genome"] + ".dict" if config["local_genome_copy"]["path_to_genome"] != "" else "resources/genome.dict",
         recal_table="results/recal/{sample}-{unit}.grp",
     output:
         bam=protected("results/recal/{sample}-{unit}.bam"),
