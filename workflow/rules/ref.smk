@@ -17,7 +17,7 @@ checkpoint genome_faidx:
     input:
         get_genome_fun,
     output:
-        config["local_genome_copy"]["path_to_genome_fai"] + ".fai" if config["local_genome_copy"]["path_to_genome_fai"] != "" else "resources/genome.fasta.fai",
+        config["local_genome_copy"]["path_to_genome_fai"] if config["local_genome_copy"]["path_to_genome_fai"] != "" else "resources/genome.fasta.fai",
     log:
         "logs/genome-faidx.log",
     cache: True
@@ -42,7 +42,7 @@ rule genome_dict:
 rule get_known_variation:
     input:
         # use fai to annotate contig lengths for GATK BQSR
-        fai=checkpoints.genome_faidx.get().output[0],
+        fai="resources/genome.fasta.fai",
     output:
         vcf="resources/variation.vcf.gz",
     log:
