@@ -89,7 +89,7 @@ rule bwa_index:
     input:
         get_genome_fun,
     output:
-        multiext(config["local_genome_copy"]["path_to_bwa_index"] if config["local_genome_copy"]["path_to_bwa_index"] != "" else "resources/genome.fasta" , ".amb", ".ann", ".bwt", ".pac", ".sa"),
+        multiext(config["local_genome_copy"]["path_to_genome"] if config["local_genome_copy"]["path_to_bwa_index"] != "" else "resources/genome.fasta" , ".amb", ".ann", ".bwt", ".pac", ".sa"),
     log:
         "logs/bwa_index.log",
     resources:
@@ -103,7 +103,7 @@ rule minimap_index:
     input:
         get_genome_fun,
     output:
-        multiext(config["local_genome_copy"]["path_to_minimap_index"] if config["local_genome_copy"]["path_to_minimap_index"] != "" else "resources/genome.fasta" , ".mni"),
+        multiext(config["local_genome_copy"]["path_to_genome"] if config["local_genome_copy"]["path_to_minimap_index"] != "" else "resources/genome.fasta" , ".mni"),
     shell:
         "minimap2 -d {output} {input}  "
 
