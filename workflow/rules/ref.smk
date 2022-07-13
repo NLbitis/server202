@@ -57,32 +57,32 @@ rule get_known_variation:
         "0.74.0/bio/reference/ensembl-variation"
 
 
-rule remove_iupac_codes:
-    input:
-        "resources/variation.vcf.gz",
-    output:
-        "resources/variation.noiupac.vcf.gz",
-    log:
-        "logs/fix-iupac-alleles.log",
-    conda:
-        "../envs/rbt.yaml"
-    cache: True
-    shell:
-        "rbt vcf-fix-iupac-alleles < {input} | bcftools view -Oz > {output}"
-
-
-rule tabix_known_variants:
-    input:
-        "resources/variation.noiupac.vcf.gz",
-    output:
-        "resources/variation.noiupac.vcf.gz.tbi",
-    log:
-        "logs/tabix/variation.log",
-    params:
-        "-p vcf",
-    cache: True
-    wrapper:
-        "0.74.0/bio/tabix"
+# rule remove_iupac_codes:
+#     input:
+#         "resources/variation.vcf.gz",
+#     output:
+#         "resources/variation.noiupac.vcf.gz",
+#     log:
+#         "logs/fix-iupac-alleles.log",
+#     conda:
+#         "../envs/rbt.yaml"
+#     cache: True
+#     shell:
+#         "rbt vcf-fix-iupac-alleles < {input} | bcftools view -Oz > {output}"
+#
+#
+# rule tabix_known_variants:
+#     input:
+#         "resources/variation.noiupac.vcf.gz",
+#     output:
+#         "resources/variation.noiupac.vcf.gz.tbi",
+#     log:
+#         "logs/tabix/variation.log",
+#     params:
+#         "-p vcf",
+#     cache: True
+#     wrapper:
+#         "0.74.0/bio/tabix"
 
 
 rule bwa_index:
