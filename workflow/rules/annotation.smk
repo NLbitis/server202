@@ -1,7 +1,7 @@
 rule annotate_variants:
     input:
         calls="results/filtered/all.vcf.gz",
-        cache="resources/vep/cache",
+        cache=config["local_genome_copy"]["vep_plugins"]+"/cache",
         plugins=config["local_genome_copy"]["vep_plugins"],
     output:
         calls=report(
