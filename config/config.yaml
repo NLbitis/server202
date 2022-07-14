@@ -15,6 +15,7 @@ local_genome_copy:
   path_to_bwa_index: "genome.fasta.bwt"
   path_to_minimap_index: "genome.fasta.mni"
   known_variants: "variation.noiupac.vcf.gz"
+  vep_plugins: "vep"
 
 filtering:
   # Set to true in order to apply machine learning based recalibration of
