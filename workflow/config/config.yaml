@@ -10,12 +10,12 @@ ref:
   build: GRCh38
 
 local_genome_copy:
-  path_to_genome: "genome.fasta"
-  path_to_genome_fai: "genome.fasta.fai"
-  path_to_bwa_index: "genome.fasta.bwt"
-  path_to_minimap_index: "genome.fasta.mni"
-  known_variants: "variation.noiupac.vcf.gz"
-  vep_plugins: "vep"
+  path_to_genome: "/home-local/resources/yeast/genome.fasta"
+  path_to_genome_fai: "/home-local/resources/yeast/genome.fasta.fai"
+  path_to_bwa_index: "/home-local/resources/yeast/genome.fasta.bwt"
+  path_to_minimap_index: "/home-local/resources/yeast/genome.fasta.mni"
+  known_variants: "/home-local/resources/yeast/variation.noiupac.vcf.gz"
+  vep_plugins: "/home-local/resources/yeast/vep"
 
 filtering:
   # Set to true in order to apply machine learning based recalibration of
