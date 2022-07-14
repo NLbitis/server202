@@ -2,7 +2,7 @@ rule annotate_variants:
     input:
         calls="results/filtered/all.vcf.gz",
         cache=config["local_genome_copy"]["vep_plugins"]+"/cache",
-        plugins=config["local_genome_copy"]["vep_plugins"],
+        plugins=config["local_genome_copy"]["vep_plugins"]+"/plugins",
     output:
         calls=report(
             "results/annotated/all.vcf.gz",
