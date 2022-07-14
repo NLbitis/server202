@@ -10,10 +10,11 @@ ref:
   build: GRCh38
 
 local_genome_copy:
-  path_to_genome: ""
-  path_to_genome_fai: ""
-  path_to_bwa_index: ""
-  path_to_minimap_index: ""
+  path_to_genome: "genome.fasta"
+  path_to_genome_fai: "genome.fasta.fai"
+  path_to_bwa_index: "genome.fasta.bwt"
+  path_to_minimap_index: "genome.fasta.mni"
+  known_variants: "variation.noiupac.vcf.gz"
 
 filtering:
   # Set to true in order to apply machine learning based recalibration of
