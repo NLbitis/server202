@@ -29,6 +29,19 @@ rule trim_reads_pe:
     wrapper:
         "0.74.0/bio/trimmomatic/pe"
 
+rule map_reads_with_minimap:
+    input:
+        reads=get_trimmed_reads,
+        idx=rules.minimap_index.output
+    output:
+        temp("results/mapped/{sample}-{unit}.sorted.minimap.bam")
+    log:
+        "logs/minimap/{sample}-{unit}.log"
+    shell:
+        """
+         minimap2 -Y  -ax sr  -R '@RG\\tID:~{wildcards.sample}\\tSM:~{wildcards.sample}\\tPL:BGI\\tLB:lib1\\tPU:unit1' {input.idx} {input.reads}  |  samtools sort -O sam -o results/mapped/test.sam
+         samtools view -b -h results/mapped/test.sam -o {output} 
+        """
 
 rule map_reads:
     input:
@@ -50,7 +63,7 @@ rule map_reads:
 
 rule mark_duplicates:
     input:
-        "results/mapped/{sample}-{unit}.sorted.bam",
+        "results/mapped/{sample}-{unit}.sorted.minimap.bam" if config["processing"]["minimap"] else "results/mapped/{sample}-{unit}.sorted.bam"
     output:
         bam=temp("results/dedup/{sample}-{unit}.bam"),
         metrics="results/qc/dedup/{sample}-{unit}.metrics.txt",
@@ -66,10 +79,10 @@ rule recalibrate_base_qualities:
     input:
         bam=get_recal_input(),
         bai=get_recal_input(bai=True),
-        ref="resources/genome.fasta",
-        dict="resources/genome.dict",
-        known="resources/variation.noiupac.vcf.gz",
-        known_idx="resources/variation.noiupac.vcf.gz.tbi",
+        ref=get_genome_fun,
+        dict=config["local_genome_copy"]["path_to_genome"] + ".dict" if config["local_genome_copy"]["path_to_genome"] != "" else "resources/genome.dict",
+        known=config["local_genome_copy"]["known_variants"],
+        known_idx=config["local_genome_copy"]["known_variants"] + ".tbi",
     output:
         recal_table="results/recal/{sample}-{unit}.grp",
     log:
@@ -86,8 +99,8 @@ rule apply_base_quality_recalibration:
     input:
         bam=get_recal_input(),
         bai=get_recal_input(bai=True),
-        ref="resources/genome.fasta",
-        dict="resources/genome.dict",
+        ref=get_genome_fun,
+        dict=config["local_genome_copy"]["path_to_genome"] + ".dict" if config["local_genome_copy"]["path_to_genome"] != "" else "resources/genome.dict",
         recal_table="results/recal/{sample}-{unit}.grp",
     output:
         bam=protected("results/recal/{sample}-{unit}.bam"),

@@ -40,9 +40,18 @@ wildcard_constraints:
 
 # contigs in reference genome
 def get_contigs():
-    with checkpoints.genome_faidx.get().output[0].open() as fai:
-        return pd.read_table(fai, header=None, usecols=[0], squeeze=True, dtype=str)
+    if config["local_genome_copy"]["path_to_genome_fai"] == "":
+        with checkpoints.genome_faidx.get().output[0].open() as fai:
+            return pd.read_table(fai, header=None, usecols=[0], squeeze=True, dtype=str, nrows=25)
+    else:
+        with open(config["local_genome_copy"]["path_to_genome_fai"], 'r') as fai:
+            return pd.read_table(fai,header=None,usecols=[0],squeeze=True,dtype=str, nrows=25)
 
+def get_fai(wildcards):
+    if config["local_genome_copy"]["path_to_genome_fai"] == "":
+        return checkpoints.genome_faidx.get().output[0]
+    else:
+        return config["local_genome_copy"]["path_to_genome_fai"]
 
 def get_fastq(wildcards):
     """Get fastq files of given sample-unit."""
@@ -64,6 +73,11 @@ def get_read_group(wildcards):
         platform=units.loc[(wildcards.sample, wildcards.unit), "platform"],
     )
 
+def get_genome_fun(wildcards):
+    if config["local_genome_copy"]["path_to_genome"] != "":
+        return config["local_genome_copy"]["path_to_genome"]
+    else:
+        return "resources/genome.fasta"
 
 def get_trimmed_reads(wildcards):
     """Get trimmed reads of given sample-unit."""
@@ -76,6 +90,8 @@ def get_trimmed_reads(wildcards):
         )
     # single end sample
     return "results/trimmed/{sample}-{unit}.fastq.gz".format(**wildcards)
+
+
 
 
 def get_sample_bams(wildcards):
@@ -155,3 +171,4 @@ def get_vartype_arg(wildcards):
 
 def get_filter(wildcards):
     return {"snv-hard-filter": config["filtering"]["hard"][wildcards.vartype]}
+

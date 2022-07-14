@@ -15,9 +15,9 @@ rule get_genome:
 
 checkpoint genome_faidx:
     input:
-        "resources/genome.fasta",
+        get_genome_fun,
     output:
-        "resources/genome.fasta.fai",
+        config["local_genome_copy"]["path_to_genome_fai"] if config["local_genome_copy"]["path_to_genome_fai"] != "" else "resources/genome.fasta.fai",
     log:
         "logs/genome-faidx.log",
     cache: True
@@ -27,9 +27,9 @@ checkpoint genome_faidx:
 
 rule genome_dict:
     input:
-        "resources/genome.fasta",
+        get_genome_fun,
     output:
-        "resources/genome.dict",
+        config["local_genome_copy"]["path_to_genome"] + ".dict" if config["local_genome_copy"]["path_to_genome"] != "" else "resources/genome.dict"
     log:
         "logs/samtools/create_dict.log",
     conda:
@@ -42,7 +42,7 @@ rule genome_dict:
 rule get_known_variation:
     input:
         # use fai to annotate contig lengths for GATK BQSR
-        fai="resources/genome.fasta.fai",
+        fai=get_fai,
     output:
         vcf="resources/variation.vcf.gz",
     log:
@@ -57,39 +57,39 @@ rule get_known_variation:
         "0.74.0/bio/reference/ensembl-variation"
 
 
-rule remove_iupac_codes:
-    input:
-        "resources/variation.vcf.gz",
-    output:
-        "resources/variation.noiupac.vcf.gz",
-    log:
-        "logs/fix-iupac-alleles.log",
-    conda:
-        "../envs/rbt.yaml"
-    cache: True
-    shell:
-        "rbt vcf-fix-iupac-alleles < {input} | bcftools view -Oz > {output}"
-
-
-rule tabix_known_variants:
-    input:
-        "resources/variation.noiupac.vcf.gz",
-    output:
-        "resources/variation.noiupac.vcf.gz.tbi",
-    log:
-        "logs/tabix/variation.log",
-    params:
-        "-p vcf",
-    cache: True
-    wrapper:
-        "0.74.0/bio/tabix"
+# rule remove_iupac_codes:
+#     input:
+#         "resources/variation.vcf.gz",
+#     output:
+#         "resources/variation.noiupac.vcf.gz",
+#     log:
+#         "logs/fix-iupac-alleles.log",
+#     conda:
+#         "../envs/rbt.yaml"
+#     cache: True
+#     shell:
+#         "rbt vcf-fix-iupac-alleles < {input} | bcftools view -Oz > {output}"
+#
+#
+# rule tabix_known_variants:
+#     input:
+#         "resources/variation.noiupac.vcf.gz",
+#     output:
+#         "resources/variation.noiupac.vcf.gz.tbi",
+#     log:
+#         "logs/tabix/variation.log",
+#     params:
+#         "-p vcf",
+#     cache: True
+#     wrapper:
+#         "0.74.0/bio/tabix"
 
 
 rule bwa_index:
     input:
-        "resources/genome.fasta",
+        get_genome_fun,
     output:
-        multiext("resources/genome.fasta", ".amb", ".ann", ".bwt", ".pac", ".sa"),
+        multiext(config["local_genome_copy"]["path_to_genome"] if config["local_genome_copy"]["path_to_bwa_index"] != "" else "resources/genome.fasta" , ".amb", ".ann", ".bwt", ".pac", ".sa"),
     log:
         "logs/bwa_index.log",
     resources:
@@ -98,6 +98,14 @@ rule bwa_index:
     wrapper:
         "0.74.0/bio/bwa/index"
 
+
+rule minimap_index:
+    input:
+        get_genome_fun,
+    output:
+        multiext(config["local_genome_copy"]["path_to_genome"] if config["local_genome_copy"]["path_to_minimap_index"] != "" else "resources/genome.fasta" , ".mni"),
+    shell:
+        "minimap2 -d {output} {input}  "
 
 rule get_vep_cache:
     output:

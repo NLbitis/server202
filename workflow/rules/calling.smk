@@ -17,10 +17,10 @@ rule call_variants:
         bai = (get_bai
                if not config['processing']['bqsr']
                else []),
-        ref="resources/genome.fasta",
-        idx="resources/genome.dict",
-        known="resources/variation.noiupac.vcf.gz",
-        tbi="resources/variation.noiupac.vcf.gz.tbi",
+        ref=get_genome_fun,
+        idx=config["local_genome_copy"]["path_to_genome"] + ".dict" if config["local_genome_copy"]["path_to_genome"] != "" else "resources/genome.dict",
+        known=config["local_genome_copy"]["known_variants"],
+        tbi=config["local_genome_copy"]["known_variants"] + ".tbi",
         regions=(
             "results/called/{contig}.regions.bed"
             if config["processing"].get("restrict-regions")
@@ -38,7 +38,7 @@ rule call_variants:
 
 rule combine_calls:
     input:
-        ref="resources/genome.fasta",
+        ref=get_genome_fun,
         gvcfs=expand(
             "results/called/{sample}.{{contig}}.g.vcf.gz", sample=samples.index
         ),
@@ -52,7 +52,7 @@ rule combine_calls:
 
 rule genotype_variants:
     input:
-        ref="resources/genome.fasta",
+        ref=get_genome_fun,
         gvcf="results/called/all.{contig}.g.vcf.gz",
     output:
         vcf=temp("results/genotyped/all.{contig}.vcf.gz"),
