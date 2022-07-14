@@ -42,10 +42,10 @@ wildcard_constraints:
 def get_contigs():
     if config["local_genome_copy"]["path_to_genome_fai"] == "":
         with checkpoints.genome_faidx.get().output[0].open() as fai:
-            return pd.read_table(fai, header=None, usecols=[0], squeeze=True, dtype=str)
+            return pd.read_table(fai, header=None, usecols=[0], squeeze=True, dtype=str, nrows=25)
     else:
         with open(config["local_genome_copy"]["path_to_genome_fai"], 'r') as fai:
-            return pd.read_table(fai,header=None,usecols=[0],squeeze=True,dtype=str)
+            return pd.read_table(fai,header=None,usecols=[0],squeeze=True,dtype=str, nrows=25)
 
 def get_fai(wildcards):
     if config["local_genome_copy"]["path_to_genome_fai"] == "":
