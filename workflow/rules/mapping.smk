@@ -31,22 +31,19 @@ rule trim_reads_pe:
 
 rule map_reads_with_minimap:
     input:
+        idx = rules.minimap_index.output,
         reads=get_trimmed_reads if config["processing"]["trimming"] else reads=unpack(get_fastq),
-        idx=rules.minimap_index.output
     output:
         temp("results/mapped/{sample}-{unit}.sorted.minimap.bam")
     log:
         "logs/minimap/{sample}-{unit}.log"
     shell:
-        """
-         minimap2 -Y  -ax sr  -R '@RG\\tID:~{wildcards.sample}\\tSM:~{wildcards.sample}\\tPL:BGI\\tLB:lib1\\tPU:unit1' {input.idx} {input.reads}  |  samtools sort -O sam -o results/mapped/test.sam
-         samtools view -b -h results/mapped/test.sam -o {output} 
-        """
+        "minimap2 -Y  -ax sr  -R '@RG\\tID:~{wildcards.sample}\\tSM:~{wildcards.sample}\\tPL:BGI\\tLB:lib1\\tPU:unit1' {input.idx} {input.reads}  |  samtools sort -O sam -o results/mapped/test.sam samtools view -b -h results/mapped/test.sam -o {output}"
 
 rule map_reads:
     input:
+        idx = rules.bwa_index.output,
         reads=get_trimmed_reads if config["processing"]["trimming"] else reads=unpack(get_fastq),
-        idx=rules.bwa_index.output,
     output:
         temp("results/mapped/{sample}-{unit}.sorted.bam"),
     log:
