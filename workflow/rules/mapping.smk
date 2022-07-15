@@ -116,10 +116,17 @@ rule apply_base_quality_recalibration:
 
 rule samtools_index:
     input:
-        "{prefix}.bam",
+        "{prefix}.bam.txt",
     output:
         "{prefix}.bam.bai",
+        "123"
     log:
         "logs/samtools/index/{prefix}.log",
     wrapper:
         "0.74.0/bio/samtools/index"
+
+rule a:
+    input:
+        config["units"]
+    shell:
+        "echo 123"
