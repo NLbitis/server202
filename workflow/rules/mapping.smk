@@ -32,7 +32,7 @@ rule trim_reads_pe:
 rule map_reads_with_minimap:
     input:
         idx = rules.minimap_index.output,
-        reads=get_trimmed_reads if config["processing"]["trimming"] else reads=unpack(get_fastq),
+        reads=get_trimmed_reads,
     output:
         temp("results/mapped/{sample}-{unit}.sorted.minimap.bam")
     log:
@@ -43,7 +43,7 @@ rule map_reads_with_minimap:
 rule map_reads:
     input:
         idx = rules.bwa_index.output,
-        reads=get_trimmed_reads if config["processing"]["trimming"] else reads=unpack(get_fastq),
+        reads=get_trimmed_reads,
     output:
         temp("results/mapped/{sample}-{unit}.sorted.bam"),
     log:
