@@ -30,6 +30,7 @@ filtering:
       "QD < 2.0 || FS > 200.0 || ReadPosRankSum < -20.0"
 
 processing:
+  trimming: false
   minimap: true
   remove-duplicates: true
   # Uncomment and point to a bed file with, e.g., captured regions if necessary,

@@ -31,7 +31,7 @@ rule trim_reads_pe:
 
 rule map_reads_with_minimap:
     input:
-        reads=get_trimmed_reads,
+        reads=get_trimmed_reads if config["processing"]["trimming"] else reads=unpack(get_fastq),
         idx=rules.minimap_index.output
     output:
         temp("results/mapped/{sample}-{unit}.sorted.minimap.bam")
@@ -45,7 +45,7 @@ rule map_reads_with_minimap:
 
 rule map_reads:
     input:
-        reads=get_trimmed_reads,
+        reads=get_trimmed_reads if config["processing"]["trimming"] else reads=unpack(get_fastq),
         idx=rules.bwa_index.output,
     output:
         temp("results/mapped/{sample}-{unit}.sorted.bam"),
@@ -123,3 +123,4 @@ rule samtools_index:
         "logs/samtools/index/{prefix}.log",
     wrapper:
         "0.74.0/bio/samtools/index"
+
