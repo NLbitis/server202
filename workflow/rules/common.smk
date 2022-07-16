@@ -92,15 +92,16 @@ def get_trimmed_reads(wildcards):
         # single end sample
         return "results/trimmed/{sample}-{unit}.fastq.gz".format(**wildcards)
     else:
+        reads = get_fastq(wildcards)
         if not is_single_end(**wildcards):
             # paired-end sample
             return expand(
-                get_fastq(wildcards),
+                reads,
                 group=[1, 2],
                 **wildcards
             )
         # single end sample
-        return get_fastq(wildcards)
+        return reads
 
 def get_sample_bams(wildcards):
     """Get all aligned reads of given sample."""
