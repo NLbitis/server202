@@ -92,7 +92,7 @@ def get_trimmed_reads(wildcards):
         # single end sample
         return "results/trimmed/{sample}-{unit}.fastq.gz".format(**wildcards)
     else:
-        reads = unpack(get_fastq)
+        reads = units.loc[(wildcards.sample, wildcards.unit), ["fq1", "fq2"]].dropna()
         if not is_single_end(**wildcards):
             # paired-end sample
             return expand(
