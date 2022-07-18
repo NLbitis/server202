@@ -10,12 +10,12 @@ ref:
   build: GRCh38
 
 local_genome_copy:
-  path_to_genome: "/home/school/resources/hg38/genome.fasta"
-  path_to_genome_fai: "/home/school/resources/hg38/genome.fasta.fai"
-  path_to_bwa_index: "/home/school/resources/hg38/genome.fasta.bwt"
-  path_to_minimap_index: "/home/school/resources/hg38/genome.fasta.mni"
-  known_variants: "/home/school/resources/hg38/variation.noiupac.vcf.gz"
-  vep_plugins: "/home/school/resources/hg38/vep"
+  path_to_genome: "/home-local/resources/hg38/genome.fasta"
+  path_to_genome_fai: "/home-local/resources/hg38/genome.fasta.fai"
+  path_to_bwa_index: "/home-local/resources/hg38/genome.fasta.bwt"
+  path_to_minimap_index: "/home-local/resources/hg38/genome.fasta.mni"
+  known_variants: "/home-local/resources/hg38/variation.noiupac.vcf.gz"
+  vep_plugins: "/home-local/resources/hg38/vep"
   #vep_plugins: "/home-local/maria/yeast/vep"
 
 filtering:
