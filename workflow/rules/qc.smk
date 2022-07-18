@@ -12,7 +12,7 @@ rule fastqc:
 
 rule samtools_stats:
     input:
-        "results/recal/{sample}-{unit}.bam",
+        get_sample_bams,
     output:
         "results/qc/samtools-stats/{sample}-{unit}.txt",
     log:
