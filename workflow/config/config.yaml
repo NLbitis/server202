@@ -17,6 +17,9 @@ local_genome_copy:
   known_variants: "/home-local/resources/yeast/variation.noiupac.vcf.gz"
   vep_plugins: "/home-local/resources/yeast/vep"
 
+local_soft:
+  strelka: "/home/school/bin/strelka-2.9.10.centos6_x86_64/bin/configureStrelkaGermlineWorkflow.py"
+
 filtering:
   # Set to true in order to apply machine learning based recalibration of
   # quality scores instead of hard filtering.
