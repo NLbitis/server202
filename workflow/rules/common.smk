@@ -115,6 +115,14 @@ def get_sample_bams(wildcards):
             unit=units.loc[wildcards.sample].unit,
         )
 
+def get_bai(wildcards):
+    return expand(
+        "results/dedup/{sample}-{unit}.bam.bai",zip,
+        sample=wildcards.sample,
+        unit=units.loc[wildcards.sample].unit,
+    )
+
+
 
 def get_regions_param(regions=config["processing"].get("restrict-regions"), default=""):
     if regions:
