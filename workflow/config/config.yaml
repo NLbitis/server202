@@ -18,7 +18,8 @@ local_genome_copy:
   vep_plugins: "/home-local/resources/yeast/vep"
 
 local_soft:
-  strelka: "/home/school/bin/strelka-2.9.10.centos6_x86_64/bin/configureStrelkaGermlineWorkflow.py"
+  strelka: "/strelka_tool/strelka-2.9.10.centos6_x86_64/bin/configureStrelkaGermlineWorkflow.py"
+  python2: "/strelka_tool/strelka-2.9.10.centos6_x86_64/bin/python2/Python-2.7.18/python"
 
 filtering:
   # Set to true in order to apply machine learning based recalibration of
@@ -35,6 +36,7 @@ filtering:
 processing:
   minimap: true
   remove-duplicates: true
+  bqsr: true
   # Uncomment and point to a bed file with, e.g., captured regions if necessary,
   # see https://gatkforums.broadinstitute.org/gatk/discussion/4133/when-should-i-use-l-to-pass-in-a-list-of-intervals.
   # restrict-regions: captured_regions.bed
