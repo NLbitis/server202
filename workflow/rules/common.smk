@@ -96,11 +96,24 @@ def get_trimmed_reads(wildcards):
 
 def get_sample_bams(wildcards):
     """Get all aligned reads of given sample."""
-    return expand(
-        "results/recal/{sample}-{unit}.bam",
-        sample=wildcards.sample,
-        unit=units.loc[wildcards.sample].unit,
-    )
+    if config['params']['bqsr']:
+        return expand(
+            "results/recal/{sample}-{unit}.bam",
+            sample=wildcards.sample,
+            unit=units.loc[wildcards.sample].unit,
+        )
+    elif not config['processing']['bqsr'] and config['processing']['remove-duplicates']:
+        return expand(
+            "results/dedup/{sample}-{unit}.bam",
+            sample=wildcards.sample,
+            unit=units.loc[wildcards.sample].unit,
+        )
+    else:
+        return expand(
+            "results/mapped/{sample}-{unit}.sorted.bam",
+            sample=wildcards.sample,
+            unit=units.loc[wildcards.sample].unit,
+        )
 
 
 def get_regions_param(regions=config["processing"].get("restrict-regions"), default=""):
