@@ -32,6 +32,42 @@ rule call_variants:
     wrapper:
         "0.59.0/bio/gatk/haplotypecaller"
 
+rule create_strelka_contigs:
+    input:
+        genome_dict=rules.genome_dict.output
+    output:
+        bed="results/strelka_beds/{contig}.bed.gz",
+        tbi="results/strelka_beds/{contig}.bed.gz.tbi"
+    shell:
+        """
+        echo "#chr    start   end" > create_strelka_contigs.{wildcards.contig}.tmp
+        grep  -P SN:{wildcards.contig}"\t" {input.genome_dict} | cut -f 2,3 | sed 's+LN:+1\t+' | sed 's+SN:++' >> create_strelka_contigs.{wildcards.contig}.tmp
+        bgzip create_strelka_contigs.{wildcards.contig}.tmp 
+        mv create_strelka_contigs.{wildcards.contig}.tmp.gz {output.bed}
+        tabix {output.bed}
+        """
+
+rule call_strelka:
+    input:
+        bam=get_sample_bams,
+        bai= (get_bai
+                if not config['processing']['bqsr']
+                else[]),
+        ref=get_genome_fun,
+        regions="results/strelka_beds/{contig}.bed.gz"
+    output:
+        vcf="results/called/{sample}_{contig}/results/variants/variants.vcf.gz"
+    params:
+        strelka=config['local_soft']['strelka'],
+        python2=config['local_soft']['python2']
+    shell:
+        """
+        {params.python2} {params.strelka} --bam {input.bam} --referenceFasta \
+        {input.ref} --runDir results/called/{wildcards.sample}_{wildcards.contig} --callRegions {input.regions} 
+        results/called/{wildcards.sample}_{wildcards.contig}/runWorkflow.py -m local --quiet
+        """
+
+
 
 rule combine_calls:
     input:
