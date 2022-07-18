@@ -96,7 +96,7 @@ def get_trimmed_reads(wildcards):
 
 def get_sample_bams(wildcards):
     """Get all aligned reads of given sample."""
-    if config['params']['bqsr']:
+    if config['processing']['bqsr']:
         return expand(
             "results/recal/{sample}-{unit}.bam",
             sample=wildcards.sample,
