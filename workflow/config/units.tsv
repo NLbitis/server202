@@ -1,2 +1,2 @@
 sample	unit	platform	fq1	fq2
-A	1	ILLUMINA	data/reads.1.fq.gz	data/reads.2.fq.gz
+A	1	ILLUMINA	/home/school/maria/project/data/NA12878_school_small_test.1.fq.gz	/home/school/maria/project/data/NA12878_school_small_test.2.fq.gz
